@@ -1,0 +1,4 @@
+--patch-module
+cr.ac.una.unaplanilla=_
+--add-reads
+cr.ac.una.unaplanilla=ALL-UNNAMED
