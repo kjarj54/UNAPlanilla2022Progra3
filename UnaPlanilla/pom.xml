@@ -111,7 +111,19 @@
                         <!-- Configuration for automatic IDE debugging -->
                         <id>ide-debug</id>
                         <configuration>
-                            <options>                               
+                            <options>
+                                <option>--add-exports</option>
+                                <option>javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.controls/com.sun.javafx.scene.control=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.base/com.sun.javafx.binding=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.graphics/com.sun.javafx.stage=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.base/com.sun.javafx.event=com.jfoenix</option>
+                                <option>--add-opens</option>
+                                <option>java.base/java.lang.reflect=com.jfoenix</option>                               
                                 <option>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</option>
                             </options>
                         </configuration>

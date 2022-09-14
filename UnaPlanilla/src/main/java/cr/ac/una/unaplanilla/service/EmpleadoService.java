@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.core.GenericType;
 import cr.ac.una.unaplanilla.model.EmpleadoDto;
 import cr.ac.una.unaplanilla.util.Request;
 import cr.ac.una.unaplanilla.util.Respuesta;
@@ -24,8 +23,15 @@ public class EmpleadoService {
     public Respuesta getUsuario(String usuario, String clave) {
         try {
             //TODO
-
-            EmpleadoDto empleado = null;
+            Map <String, Object> parametros = new HashMap<>();
+            parametros.put("usuario",usuario );
+            parametros.put("clave",clave );
+            Request request = new Request("EmpleadoController/usuario", "/{usuario}/{clave}", parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(), "");
+            }
+            EmpleadoDto empleado = (EmpleadoDto)request.readEntity(EmpleadoDto.class);
             return new Respuesta(true, "", "", "Empleado", empleado);
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoService.class.getName()).log(Level.SEVERE, "Error obteniendo el usuario [" + usuario + "]", ex);
