@@ -60,6 +60,11 @@ public class EmpleadoService {
     public Respuesta getEmpleados(String cedula, String nombre, String pApellido) {
         try {
             //TODO
+            Map <String, Object> parametros = new HashMap<>();
+            parametros.put("cedula", cedula);
+            parametros.put("nombre", nombre);
+            parametros.put("pApellido", pApellido);
+            Request request = new Request("EmpleadoController/cedula","{cedula}",parametros);
             List<EmpleadoDto> empleados = null;
             return new Respuesta(true, "", "", "Empleados", empleados);
         } catch (Exception ex) {

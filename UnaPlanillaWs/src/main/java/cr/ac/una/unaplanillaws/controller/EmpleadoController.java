@@ -88,7 +88,7 @@ public class EmpleadoController {
 
     //TODO
     @GET
-    @Path("/cedula/{cedula}/{nombre}/{pApellido}")
+    @Path("/cedula/{cedula : (/cedula)?}/{nombre}/{pApellido}")
     public Response getEmpleados(@PathParam("cedula")String cedula, @PathParam("nombre") String nombre, @PathParam("pApellido")String pApellido) {
         try {
             Respuesta res = empleadoService.getEmpleados(cedula, nombre, pApellido);
