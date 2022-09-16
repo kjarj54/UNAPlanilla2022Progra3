@@ -71,7 +71,7 @@ public class EmpleadoController {
     //TODO
     @GET
     @Path("/id/{id}")
-    public Response getEmpleado(Long id) {
+    public Response getEmpleado(@PathParam("id")Long id) {
         try {
             Respuesta res = empleadoService.getEmpleado(id);
             //String usuarioRequest = securityContext.getUserPrincipal().getName();
@@ -85,21 +85,24 @@ public class EmpleadoController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el id").build();//TODO
         }
     }
-/*
+
     //TODO
-    public Response getEmpleados(String cedula, String nombre, String pApellido) {
+    @GET
+    @Path("/cedula/{cedula}/{nombre}/{pApellido}")
+    public Response getEmpleados(@PathParam("cedula")String cedula, @PathParam("nombre") String nombre, @PathParam("pApellido")String pApellido) {
         try {
             Respuesta res = empleadoService.getEmpleados(cedula, nombre, pApellido);
             if (!res.getEstado()) {
-                return null;//TODO
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            return null;//TODO
+            List<EmpleadoDto> empleadoDto = (List<EmpleadoDto>) res.getResultado("Empleado");
+            return Response.ok(empleadoDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;//TODO
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la cedula,nombre,apellido").build();//TODO
         }
     }
-
+/*
     //TODO
     public Response guardarEmpleado(EmpleadoDto empleado) {
         try {

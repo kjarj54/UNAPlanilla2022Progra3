@@ -42,8 +42,14 @@ public class EmpleadoService {
     public Respuesta getEmpleado(Long id) {
         try {
             //TODO
-
-            EmpleadoDto empleado = null;
+            Map <String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            Request request = new Request("EmpleadoController/id","{id}",parametros);
+            request.get();
+            if(request.isError()){
+                return new Respuesta(false, request.getError(),"");
+            }
+            EmpleadoDto empleado = (EmpleadoDto)request.readEntity(EmpleadoDto.class);
             return new Respuesta(true, "", "", "Empleado", empleado);
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoService.class.getName()).log(Level.SEVERE, "Error obteniendo el empleado [" + id + "]", ex);
