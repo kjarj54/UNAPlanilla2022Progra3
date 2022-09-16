@@ -67,22 +67,25 @@ public class EmpleadoController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el usuario").build();
         }
     }
-/*
+
     //TODO
+    @GET
+    @Path("/id/{id}")
     public Response getEmpleado(Long id) {
         try {
             Respuesta res = empleadoService.getEmpleado(id);
             //String usuarioRequest = securityContext.getUserPrincipal().getName();
             if (!res.getEstado()) {
-                return null;//TODO
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            return null;//TODO
+            EmpleadoDto empleadoDto = (EmpleadoDto) res.getResultado("Empleado");
+            return Response.ok(empleadoDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;//TODO
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el id").build();//TODO
         }
     }
-
+/*
     //TODO
     public Response getEmpleados(String cedula, String nombre, String pApellido) {
         try {
