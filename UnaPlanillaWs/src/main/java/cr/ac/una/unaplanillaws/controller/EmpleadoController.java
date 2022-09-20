@@ -120,8 +120,8 @@ public class EmpleadoController {
     }
     
     @DELETE
-    @Path("id")
-    public Response eliminarEmpleado(Long id) {
+    @Path("id/{id}")
+    public Response eliminarEmpleado(@PathParam("id")Long id) {
         try {
             Respuesta res = empleadoService.eliminarEmpleado(id);
             if (!res.getEstado()) {
