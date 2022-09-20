@@ -102,33 +102,37 @@ public class EmpleadoController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la cedula,nombre,apellido").build();//TODO
         }
     }
-/*
+
     //TODO
+    @POST
     public Response guardarEmpleado(EmpleadoDto empleado) {
         try {
-            Respuesta respuesta = empleadoService.guardarEmpleado(empleado);
-            if (!respuesta.getEstado()) {
-                return null;//TODO
+            Respuesta res = empleadoService.guardarEmpleado(empleado);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            return null;//TODO
+            EmpleadoDto empleadoDto = (EmpleadoDto)res.getResultado("Empleado");
+            return Response.ok(empleadoDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;//TODO
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el empleado").build();//TODO
         }
     }
     
-    //TODO
+    @DELETE
+    @Path("id")
     public Response eliminarEmpleado(Long id) {
         try {
-            Respuesta respuesta = empleadoService.eliminarEmpleado(id);
-            if (!respuesta.getEstado()) {
-                return null;//TODO
+            Respuesta res = empleadoService.eliminarEmpleado(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            return null;//TODO
+            EmpleadoDto empleadoDto = (EmpleadoDto)res.getResultado("Empleado");
+            return Response.ok(empleadoDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
-            return null;//TODO
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error eliminando el empleado").build();//TODO
         }
     }
-*/
+
 }
