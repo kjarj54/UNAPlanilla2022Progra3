@@ -84,6 +84,9 @@ public class EmpleadoService {
             //TODO
             Request request = new Request("EmpleadoController/empleados");
             request.post(empleado);
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "");
+            }
             EmpleadoDto empleadoDto = (EmpleadoDto) request.readEntity(EmpleadoDto.class);
             return new Respuesta(true, "", "", "Empleado", empleadoDto);
         } catch (Exception ex) {

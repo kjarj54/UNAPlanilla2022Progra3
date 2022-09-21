@@ -106,7 +106,7 @@ public class EmpleadoController {
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            return Response.ok().build();//TODO
+            return Response.ok((EmpleadoDto)res.getResultado("Empleado")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el empleado").build();//TODO
