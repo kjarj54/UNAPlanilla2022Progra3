@@ -19,6 +19,7 @@ import cr.ac.una.unaplanillaws.service.EmpleadoService;
 import cr.ac.una.unaplanillaws.util.CodigoRespuesta;
 import cr.ac.una.unaplanillaws.util.Respuesta;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.core.GenericEntity;
 
 /**
  *
@@ -62,7 +63,7 @@ public class EmpleadoController {
 
     //TODO
     @GET
-    @Path("/id/{id}")
+    @Path("/empleados/{id}")
     public Response getEmpleado(@PathParam("id")Long id) {
         try {
             Respuesta res = empleadoService.getEmpleado(id);
@@ -74,21 +75,21 @@ public class EmpleadoController {
             return Response.ok(empleadoDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
-            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el id").build();//TODO
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el empleado").build();//TODO
         }
     }
 
     //TODO
     @GET
-    @Path("/cedula/{cedula}/{nombre}/{pApellido}")
+    @Path("/empleados/{cedula}/{nombre}/{pApellido}")
     public Response getEmpleados(@PathParam("cedula")String cedula, @PathParam("nombre") String nombre, @PathParam("pApellido")String pApellido) {
         try {
             Respuesta res = empleadoService.getEmpleados(cedula, nombre, pApellido);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            List<EmpleadoDto> empleadoDto = (List<EmpleadoDto>) res.getResultado("Empleado");
-            return Response.ok(empleadoDto).build();//TODO
+            return Response.ok(new GenericEntity<List<EmpleadoDto>>((List<EmpleadoDto>) res.getResultado("Empleados")) {
+            }).build();
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo la cedula,nombre,apellido").build();//TODO

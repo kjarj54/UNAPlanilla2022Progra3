@@ -31,6 +31,7 @@ import javafx.scene.layout.AnchorPane;
 import cr.ac.una.unaplanilla.service.EmpleadoService;
 import cr.ac.una.unaplanilla.model.EmpleadoDto;
 import cr.ac.una.unaplanilla.util.BindingUtils;
+import cr.ac.una.unaplanilla.util.FlowController;
 import cr.ac.una.unaplanilla.util.Formato;
 import cr.ac.una.unaplanilla.util.Mensaje;
 import cr.ac.una.unaplanilla.util.Respuesta;
@@ -256,6 +257,13 @@ public class EmpleadosController extends Controller implements Initializable {
 
     @FXML
     private void buscarEmpleado(ActionEvent event) {
+        BusquedaViewController busquedaController = (BusquedaViewController) FlowController.getInstance().getController("BusquedaView");
+        busquedaController.busquedaEmpleados();
+        FlowController.getInstance().goViewInWindowModal("BusquedaView", getStage(),true);
+        EmpleadoDto empleadoDto = (EmpleadoDto) busquedaController.getResultado();
+        if (empleadoDto != null) {
+            cargarEmpleado(empleadoDto.getEmpId());
+        }
     }
 
     @FXML

@@ -13,66 +13,72 @@ import java.util.logging.Logger;
 import cr.ac.una.unaplanilla.model.EmpleadoDto;
 import cr.ac.una.unaplanilla.util.Request;
 import cr.ac.una.unaplanilla.util.Respuesta;
+import jakarta.ws.rs.core.GenericType;
 
 /**
  *
  * @author Carlos
  */
 public class EmpleadoService {
-    
+
     public Respuesta getUsuario(String usuario, String clave) {
         try {
             //TODO
-            Map <String, Object> parametros = new HashMap<>();
-            parametros.put("usuario",usuario );
-            parametros.put("clave",clave );
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("usuario", usuario);
+            parametros.put("clave", clave);
             Request request = new Request("EmpleadoController/usuario", "/{usuario}/{clave}", parametros);
             request.get();
-            if(request.isError()){
+            if (request.isError()) {
                 return new Respuesta(false, request.getError(), "");
             }
-            EmpleadoDto empleado = (EmpleadoDto)request.readEntity(EmpleadoDto.class);
+            EmpleadoDto empleado = (EmpleadoDto) request.readEntity(EmpleadoDto.class);
             return new Respuesta(true, "", "", "Empleado", empleado);
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoService.class.getName()).log(Level.SEVERE, "Error obteniendo el usuario [" + usuario + "]", ex);
             return new Respuesta(false, "Error obteniendo el usuario.", "getUsuario " + ex.getMessage());
         }
     }
-    
+
     public Respuesta getEmpleado(Long id) {
         try {
             //TODO
-            Map <String, Object> parametros = new HashMap<>();
+            Map<String, Object> parametros = new HashMap<>();
             parametros.put("id", id);
-            Request request = new Request("EmpleadoController/id","{id}",parametros);
+            Request request = new Request("EmpleadoController/empleados", "{id}", parametros);
             request.get();
-            if(request.isError()){
-                return new Respuesta(false, request.getError(),"");
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "");
             }
-            EmpleadoDto empleado = (EmpleadoDto)request.readEntity(EmpleadoDto.class);
+            EmpleadoDto empleado = (EmpleadoDto) request.readEntity(EmpleadoDto.class);
             return new Respuesta(true, "", "", "Empleado", empleado);
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoService.class.getName()).log(Level.SEVERE, "Error obteniendo el empleado [" + id + "]", ex);
             return new Respuesta(false, "Error obteniendo el empleado.", "getEmpleado " + ex.getMessage());
         }
     }
-    
+
     public Respuesta getEmpleados(String cedula, String nombre, String pApellido) {
         try {
             //TODO
-            Map <String, Object> parametros = new HashMap<>();
+            Map<String, Object> parametros = new HashMap<>();
             parametros.put("cedula", cedula);
             parametros.put("nombre", nombre);
             parametros.put("pApellido", pApellido);
-            Request request = new Request("EmpleadoController/cedula","{cedula}",parametros);
-            List<EmpleadoDto> empleados = null;
+            Request request = new Request("EmpleadoController/empleados", "/{cedula}/{nombre}/{pApellido}", parametros);
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "");
+            }
+            List<EmpleadoDto> empleados = (List<EmpleadoDto>) request.readEntity(new GenericType<List<EmpleadoDto>>() {
+            });
             return new Respuesta(true, "", "", "Empleados", empleados);
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoService.class.getName()).log(Level.SEVERE, "Error obteniendo empleados.", ex);
             return new Respuesta(false, "Error obteniendo empleados.", "getEmpleados " + ex.getMessage());
         }
     }
-    
+
     public Respuesta guardarEmpleado(EmpleadoDto empleado) {
         try {
             //TODO
@@ -84,7 +90,7 @@ public class EmpleadoService {
             return new Respuesta(false, "Error guardando el empleado.", "guardarEmpleado " + ex.getMessage());
         }
     }
-    
+
     public Respuesta eliminarEmpleado(Long id) {
         try {
             //TODO
