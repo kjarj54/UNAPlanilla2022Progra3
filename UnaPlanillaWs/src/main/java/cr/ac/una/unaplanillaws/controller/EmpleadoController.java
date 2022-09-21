@@ -28,6 +28,7 @@ import javax.ws.rs.core.GenericEntity;
 
 //TODO
 @Path("/EmpleadoController")
+
 public class EmpleadoController {
 
     //TODO
@@ -98,14 +99,14 @@ public class EmpleadoController {
 
     //TODO
     @POST
+    @Path("/empleados")
     public Response guardarEmpleado(EmpleadoDto empleado) {
         try {
             Respuesta res = empleadoService.guardarEmpleado(empleado);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            EmpleadoDto empleadoDto = (EmpleadoDto)res.getResultado("Empleado");
-            return Response.ok(empleadoDto).build();//TODO
+            return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el empleado").build();//TODO
@@ -113,15 +114,13 @@ public class EmpleadoController {
     }
     
     @DELETE
-    @Path("id/{id}")
     public Response eliminarEmpleado(@PathParam("id")Long id) {
         try {
             Respuesta res = empleadoService.eliminarEmpleado(id);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            EmpleadoDto empleadoDto = (EmpleadoDto)res.getResultado("Empleado");
-            return Response.ok(empleadoDto).build();//TODO
+            return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error eliminando el empleado").build();//TODO

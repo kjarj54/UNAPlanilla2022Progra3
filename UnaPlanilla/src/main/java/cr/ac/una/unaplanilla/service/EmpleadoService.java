@@ -82,8 +82,9 @@ public class EmpleadoService {
     public Respuesta guardarEmpleado(EmpleadoDto empleado) {
         try {
             //TODO
-
-            EmpleadoDto empleadoDto = null;
+            Request request = new Request("EmpleadoController/empleados");
+            request.post(empleado);
+            EmpleadoDto empleadoDto = (EmpleadoDto) request.readEntity(EmpleadoDto.class);
             return new Respuesta(true, "", "", "Empleado", empleadoDto);
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoService.class.getName()).log(Level.SEVERE, "Error guardando el empleado.", ex);
