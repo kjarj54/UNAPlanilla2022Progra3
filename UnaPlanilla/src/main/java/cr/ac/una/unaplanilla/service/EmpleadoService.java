@@ -97,7 +97,14 @@ public class EmpleadoService {
 
     public Respuesta eliminarEmpleado(Long id) {
         try {
-            //TODO
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("id", id);
+            Request request = new Request("EmpleadoController/empleados", "{id}", parametros);
+            request.delete();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "");
+            }
+            
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoService.class.getName()).log(Level.SEVERE, "Error eliminando el empleado.", ex);
