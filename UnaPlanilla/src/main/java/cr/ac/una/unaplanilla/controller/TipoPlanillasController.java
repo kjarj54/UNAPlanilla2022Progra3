@@ -39,6 +39,7 @@ import cr.ac.una.unaplanilla.model.EmpleadoDto;
 import cr.ac.una.unaplanilla.model.TipoPlanillaDto;
 import cr.ac.una.unaplanilla.service.EmpleadoService;
 import cr.ac.una.unaplanilla.service.TipoPlanillaService;
+import cr.ac.una.unaplanilla.util.FlowController;
 import cr.ac.una.unaplanilla.util.Formato;
 import cr.ac.una.unaplanilla.util.Mensaje;
 import cr.ac.una.unaplanilla.util.Respuesta;
@@ -236,7 +237,13 @@ public class TipoPlanillasController extends Controller implements Initializable
 
     @FXML
     private void buscarTipoPlanilla(ActionEvent event) {
-        //FlowController.getInstance().goViewInWindowModal("Busqueda", getStage(), true);
+        BusquedaViewController busquedaController = (BusquedaViewController) FlowController.getInstance().getController("BusquedaView");
+        busquedaController.busquedaPlanillas();
+        FlowController.getInstance().goViewInWindowModal("BusquedaView", getStage(),true);
+        TipoPlanillaDto tipoPlanillasDto = (TipoPlanillaDto) busquedaController.getResultado();
+        if (tipoPlanillasDto != null) {
+            cargarTipoPlanilla(tipoPlanillasDto.getTplaId());
+        }
     }
 
     @Override

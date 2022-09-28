@@ -26,12 +26,14 @@ import javax.persistence.Query;
  *
  * @author Carlos
  */
-//TODO
+@Stateless
+@LocalBean
 public class TipoPlanillaService {
 
     private static final Logger LOG = Logger.getLogger(TipoPlanillaService.class.getName());
 
     //TODO
+    @PersistenceContext(unitName = "UnaPlanillaWsPU")
     private EntityManager em;
 
     public Respuesta getTipoPlanilla(Long id) {
