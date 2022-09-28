@@ -12,6 +12,10 @@ import cr.ac.una.unaplanillaws.model.TipoPlanillaDto;
 import cr.ac.una.unaplanillaws.util.CodigoRespuesta;
 import cr.ac.una.unaplanillaws.util.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
@@ -58,7 +62,7 @@ public class TipoPlanillaService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el tipo de planilla.", "getTipoPlanilla " + ex.getMessage());
         }
     }
-
+    
     public Respuesta guardarTipoPlanilla(TipoPlanillaDto tipoPlanillaDto) {
         try {
             TipoPlanilla tipoPlanilla;
@@ -115,4 +119,28 @@ public class TipoPlanillaService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el tipo de planilla.", "eliminarTipoPlanilla " + ex.getMessage());
         }
     }
+    
+    
+    public Respuesta getPlanillas(String codigo, String descripcion, String planillasPorMes) {
+        try {
+            Query qryEmpleado = em.createNamedQuery("TipoPlanilla.findByCodigoDescripcionPlanillasPorMes", TipoPlanilla.class);
+            qryEmpleado.setParameter("codigo", codigo);
+            qryEmpleado.setParameter("descripcion", descripcion);
+            qryEmpleado.setParameter("planillasPorMes", planillasPorMes);
+            List<TipoPlanilla> planillas = qryEmpleado.getResultList();
+            List<TipoPlanillaDto> planillasDto = new ArrayList<>();
+            for (TipoPlanilla tipoPlanilla : planillas) {
+                planillasDto.add(new TipoPlanillaDto(tipoPlanilla));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Planillas", planillasDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen planillas con los criterios ingresados.", "getPlanillas NoResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar las planillas.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar las planillas.", "getPlanillas " + ex.getMessage());
+        }
+    }
+
 }

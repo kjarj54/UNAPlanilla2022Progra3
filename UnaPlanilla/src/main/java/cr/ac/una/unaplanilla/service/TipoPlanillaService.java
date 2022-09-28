@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 import cr.ac.una.unaplanilla.model.TipoPlanillaDto;
 import cr.ac.una.unaplanilla.util.Request;
 import cr.ac.una.unaplanilla.util.Respuesta;
+import jakarta.ws.rs.core.GenericType;
+import java.util.List;
 
 /**
  *
@@ -30,6 +32,27 @@ public class TipoPlanillaService {
             }
             TipoPlanillaDto tipoPlanilla = (TipoPlanillaDto) request.readEntity(TipoPlanillaDto.class);
             return new Respuesta(true, "", "", "TipoPlanilla", tipoPlanilla);
+        } catch (Exception ex) {
+            Logger.getLogger(TipoPlanillaService.class.getName()).log(Level.SEVERE, "Ocurrio un error al consultar el tipo de planilla.", ex);
+            return new Respuesta(false, "Ocurrio un error al consultar el tipo de planilla.", "getTipoPlanilla " + ex.getMessage());
+        }
+    }
+    
+    public Respuesta getTipoPlanillas(String codigo,String descripcion,String planillasPorMes) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("codigo", codigo);
+            parametros.put("descripcion", descripcion);
+            parametros.put("planillasPorMes",planillasPorMes);
+            Request request = new Request("PlanillasController/tipoplanillas","/{codigo}/{descripcion}/{planillasPorMes}", parametros);
+            request.get();
+            if(request.isError())
+            {
+                return new Respuesta(false, request.getError(), "");
+            }
+            List<TipoPlanillaDto> tipoPlanilla = (List<TipoPlanillaDto>) request.readEntity(new GenericType<List<TipoPlanillaDto>>(){});
+            return new Respuesta(true, "", "", "TipoPlanillas", tipoPlanilla);
+
         } catch (Exception ex) {
             Logger.getLogger(TipoPlanillaService.class.getName()).log(Level.SEVERE, "Ocurrio un error al consultar el tipo de planilla.", ex);
             return new Respuesta(false, "Ocurrio un error al consultar el tipo de planilla.", "getTipoPlanilla " + ex.getMessage());

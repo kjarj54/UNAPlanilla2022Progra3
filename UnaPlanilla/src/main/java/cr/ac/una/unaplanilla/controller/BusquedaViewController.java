@@ -274,7 +274,7 @@ public void busquedaPlanillas() {
                 
                 String cedula = "%" + txtCedula.getText() + "%";
                 
-                Respuesta respuesta = service.getTipoPlanilla(Long.MIN_VALUE);//service.getTipoPlanillas(codigo.toUpperCase(), descripcion.toUpperCase(), planillasPorMes.toUpperCase());
+                Respuesta respuesta = service.getTipoPlanillas(codigo.toUpperCase(), descripcion.toUpperCase(), planillasPorMes.toUpperCase());
                 
                 if(txtIDEmpleado.getText()!= null || txtCedula.getText()!= null){
                    //respuesta = service.getTipoPlanillasIDyCed(idEmp.toUpperCase(), cedula.toUpperCase());  
