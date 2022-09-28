@@ -51,7 +51,7 @@ public class TipoPlanillaService {
                 return new Respuesta(false, request.getError(), "");
             }
             List<TipoPlanillaDto> tipoPlanilla = (List<TipoPlanillaDto>) request.readEntity(new GenericType<List<TipoPlanillaDto>>(){});
-            return new Respuesta(true, "", "", "Planillas", tipoPlanilla);
+            return new Respuesta(true, "", "", "TipoPlanillas", tipoPlanilla);
 
         } catch (Exception ex) {
             Logger.getLogger(TipoPlanillaService.class.getName()).log(Level.SEVERE, "Ocurrio un error al consultar el tipo de planilla.", ex);

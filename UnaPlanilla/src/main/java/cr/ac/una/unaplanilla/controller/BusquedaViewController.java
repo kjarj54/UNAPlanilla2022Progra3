@@ -41,7 +41,7 @@ import javafx.scene.input.KeyEvent;
 /**
  * FXML Controller class
  *
- * 
+ * @author cbcar
  */
 public class BusquedaViewController extends Controller implements Initializable {
 
