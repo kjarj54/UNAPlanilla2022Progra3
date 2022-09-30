@@ -16,8 +16,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -62,7 +64,7 @@ public class TipoPlanillaService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el tipo de planilla.", "getTipoPlanilla " + ex.getMessage());
         }
     }
-    
+
     public Respuesta guardarTipoPlanilla(TipoPlanillaDto tipoPlanillaDto) {
         try {
             TipoPlanilla tipoPlanilla;
@@ -119,21 +121,22 @@ public class TipoPlanillaService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el tipo de planilla.", "eliminarTipoPlanilla " + ex.getMessage());
         }
     }
-    
-    
+
     public Respuesta getPlanillas(String codigo, String descripcion, String planillasPorMes) {
         try {
-            Query qryEmpleado = em.createNamedQuery("TipoPlanilla.findByCodigoDescripcionPlanillasPorMes", TipoPlanilla.class);
-            qryEmpleado.setParameter("codigo", codigo);
+            Query qryEmpleado = em.createNamedQuery("TipoPlanilla.findAll", TipoPlanilla.class);
+            /*qryEmpleado.setParameter("codigo", codigo);
             qryEmpleado.setParameter("descripcion", descripcion);
-            qryEmpleado.setParameter("planillasPorMes", planillasPorMes);
+            qryEmpleado.setParameter("planillasPorMes", planillasPorMes);*/
             List<TipoPlanilla> planillas = qryEmpleado.getResultList();
             List<TipoPlanillaDto> planillasDto = new ArrayList<>();
             for (TipoPlanilla tipoPlanilla : planillas) {
                 planillasDto.add(new TipoPlanillaDto(tipoPlanilla));
             }
+            
+           List<TipoPlanillaDto> planillasDto2 = planillasDto.stream().filter((t) -> codigo.equals("%%") || t.getTplaCodigo().contains(codigo)).filter((t) -> descripcion.equals("%%") || t.getTplaDescripcion().contains(descripcion)).collect(Collectors.toList());
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Planillas", planillasDto);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Planillas", planillasDto2);
 
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen planillas con los criterios ingresados.", "getPlanillas NoResultException");
@@ -142,5 +145,10 @@ public class TipoPlanillaService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar las planillas.", "getPlanillas " + ex.getMessage());
         }
     }
-
+    /*
+    private List<TipoPlanillaDto> filter(String drescipcion, List<TipoPlanillaDto> lista){
+        return
+        
+    }
+*/
 }
