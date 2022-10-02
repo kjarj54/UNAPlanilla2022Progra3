@@ -13,6 +13,7 @@ import java.util.List;
  * @author cbcar
  */
 public class TipoPlanillaDto {
+
     private Long tplaId;
     public String tplaCodigo;
     public String tplaDescripcion;
@@ -105,7 +106,7 @@ public class TipoPlanillaDto {
     public void setTplaEstado(String tplaEstado) {
         this.tplaEstado = tplaEstado;
     }
-    
+
     public Boolean getModificado() {
         return modificado;
     }
@@ -134,6 +135,5 @@ public class TipoPlanillaDto {
     public String toString() {
         return "TipoPlanillaDto{" + "tplaId=" + tplaId + ", tplaCodigo=" + tplaCodigo + '}';
     }
-    
-    
+
 }

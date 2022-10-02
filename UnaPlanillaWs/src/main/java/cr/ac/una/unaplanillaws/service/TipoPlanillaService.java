@@ -134,7 +134,7 @@ public class TipoPlanillaService {
                 planillasDto.add(new TipoPlanillaDto(tipoPlanilla));
             }
             
-           List<TipoPlanillaDto> planillasDto2 = planillasDto.stream().filter((t) -> codigo.equals("%%") || t.getTplaCodigo().contains(codigo)).filter((t) -> descripcion.equals("%%") || t.getTplaDescripcion().contains(descripcion)).collect(Collectors.toList());
+           List<TipoPlanillaDto> planillasDto2 = planillasDto.stream().filter((t) -> codigo.equals("%") || t.getTplaCodigo().contains(codigo)).filter((t) -> descripcion.equals("%") || t.getTplaDescripcion().contains(descripcion)).filter((t)-> planillasPorMes.equals("%") || t.getTplaPlaxmes().toString().contains(planillasPorMes)).collect(Collectors.toList());
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Planillas", planillasDto2);
 

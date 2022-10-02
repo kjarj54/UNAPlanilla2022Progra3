@@ -24,7 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import  com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.unaplanilla.model.EmpleadoDto;
 import cr.ac.una.unaplanilla.model.TipoPlanillaDto;
 import cr.ac.una.unaplanilla.service.EmpleadoService;
@@ -57,9 +57,9 @@ public class BusquedaViewController extends Controller implements Initializable 
     private TableView tbvResultados;
     @FXML
     private JFXButton btnAceptar;
-    
+
     private EventHandler<KeyEvent> keyEnter;
-    
+
     private Object resultado;
 
     /**
@@ -67,12 +67,12 @@ public class BusquedaViewController extends Controller implements Initializable 
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       keyEnter = (KeyEvent event) -> {
+        keyEnter = (KeyEvent event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 btnFiltrar.fire();
             }
         };
-    }    
+    }
 
     @FXML
     private void OnMousePressedTbvResultados(MouseEvent event) {
@@ -87,40 +87,39 @@ public class BusquedaViewController extends Controller implements Initializable 
         //getStage().getScene().setRoot(new Pane());
         getStage().close();
     }
-    
+
     public Object getResultado() {
         return resultado;
     }
-    
+
     public void busquedaEmpleados() {
         try {
             lblTitulo.setText("Búsqueda de Empleados");
-            
+
             JFXTextField txtCedula = new JFXTextField();
             txtCedula.setLabelFloat(true);
             txtCedula.setPromptText("Cédula");
             txtCedula.setOnKeyPressed(keyEnter);
             txtCedula.setTextFormatter(Formato.getInstance().cedulaFormat(40));
-            
+
             JFXTextField txtNombre = new JFXTextField();
             txtNombre.setLabelFloat(true);
             txtNombre.setPromptText("Nombre");
             txtNombre.setTextFormatter(Formato.getInstance().letrasFormat(30));
             txtNombre.setOnKeyPressed(keyEnter);
-            
+
             JFXTextField txtPApellido = new JFXTextField();
             txtPApellido.setLabelFloat(true);
             txtPApellido.setPromptText("Primer Apellido");
             txtPApellido.setTextFormatter(Formato.getInstance().letrasFormat(15));
             txtPApellido.setOnKeyPressed(keyEnter);
-            
+
             JFXTextField txtSApellido = new JFXTextField();
             txtSApellido.setLabelFloat(true);
             txtSApellido.setPromptText("Segundo Apellido");
             txtSApellido.setTextFormatter(Formato.getInstance().letrasFormat(15));
             txtSApellido.setOnKeyPressed(keyEnter);
-            
-            
+
             vbxParametros.getChildren().clear();
             vbxParametros.getChildren().add(txtCedula);
             vbxParametros.getChildren().add(txtNombre);
@@ -129,28 +128,27 @@ public class BusquedaViewController extends Controller implements Initializable 
 
             tbvResultados.getColumns().clear();
             tbvResultados.getItems().clear();
-            
+
             TableColumn<EmpleadoDto, String> tbcId = new TableColumn<>("Id");
             tbcId.setPrefWidth(0);
             tbcId.setCellValueFactory(cd -> cd.getValue().empId);
-            
+
             TableColumn<EmpleadoDto, String> tbcCedula = new TableColumn<>("Cédula");
             tbcCedula.setPrefWidth(100);
             tbcCedula.setCellValueFactory(cd -> cd.getValue().empCedula);
-            
+
             TableColumn<EmpleadoDto, String> tbcNombre = new TableColumn<>("Nombre");
             tbcNombre.setPrefWidth(150);
             tbcNombre.setCellValueFactory(cd -> cd.getValue().empNombre);
-            
+
             TableColumn<EmpleadoDto, String> tbcPApellido = new TableColumn<>("Primer Apellido");
             tbcPApellido.setPrefWidth(150);
             tbcPApellido.setCellValueFactory(cd -> cd.getValue().empPapellido);
-            
+
             TableColumn<EmpleadoDto, String> tbcSApellido = new TableColumn<>("Segundo Apellido");
             tbcSApellido.setPrefWidth(150);
             tbcSApellido.setCellValueFactory(cd -> cd.getValue().empSapellido);
-            
-            
+
             tbvResultados.getColumns().add(tbcId);
             tbvResultados.getColumns().add(tbcCedula);
             tbvResultados.getColumns().add(tbcNombre);
@@ -161,13 +159,14 @@ public class BusquedaViewController extends Controller implements Initializable 
             btnFiltrar.setOnAction((ActionEvent event) -> {
                 tbvResultados.getItems().clear();
                 EmpleadoService service = new EmpleadoService();
-                String cedula = "%" + txtCedula.getText() + "%";
 
-                String nombre = "%" + txtNombre.getText() + "%";
-                
-                String pApellido = "%" + txtPApellido.getText() + "%";
-                
-                String sApellido = "%" + txtSApellido.getText() + "%";
+                String cedula = "%" + txtCedula.getText();
+
+                String nombre = "%" + txtNombre.getText();
+
+                String pApellido = "%" + txtPApellido.getText();
+
+                String sApellido = "%" + txtSApellido.getText();
 
                 Respuesta respuesta = service.getEmpleados(cedula.toUpperCase(), nombre.toUpperCase(), pApellido.toUpperCase());
 
@@ -184,48 +183,47 @@ public class BusquedaViewController extends Controller implements Initializable 
             new Mensaje().showModal(Alert.AlertType.ERROR, "Consultar empleados", getStage(), "Ocurrio un error consultado los empleados.");
         }
     }
-public void busquedaPlanillas() {
+
+    public void busquedaPlanillas() {
         try {
             lblTitulo.setText("Búsqueda de Planillas");
-            
-            
-            
+
             JFXTextField txtID = new JFXTextField();
             txtID.setLabelFloat(true);
             txtID.setPromptText("ID");
             txtID.setTextFormatter(Formato.getInstance().integerFormat());
             txtID.setOnKeyPressed(keyEnter);
-            
+
             JFXTextField txtCodigo = new JFXTextField();
             txtCodigo.setLabelFloat(true);
             txtCodigo.setPromptText("Codigo");
             txtCodigo.setTextFormatter(Formato.getInstance().maxLengthFormat(4));
             txtCodigo.setOnKeyPressed(keyEnter);
-            
+
             JFXTextField txtDescripcion = new JFXTextField();
             txtDescripcion.setLabelFloat(true);
             txtDescripcion.setPromptText("Descripcion");
             txtDescripcion.setTextFormatter(Formato.getInstance().letrasFormat(40));
             txtDescripcion.setOnKeyPressed(keyEnter);
-            
+
             JFXTextField txtPlaxMes = new JFXTextField();
             txtPlaxMes.setLabelFloat(true);
             txtPlaxMes.setPromptText("Planillas por mes");
             txtPlaxMes.setOnKeyPressed(keyEnter);
             txtPlaxMes.setTextFormatter(Formato.getInstance().integerFormat());
-            
+
             JFXTextField txtIDEmpleado = new JFXTextField();
             txtIDEmpleado.setLabelFloat(true);
             txtIDEmpleado.setPromptText("ID Empleado");
             txtIDEmpleado.setTextFormatter(Formato.getInstance().integerFormat());
             txtIDEmpleado.setOnKeyPressed(keyEnter);
-            
+
             JFXTextField txtCedula = new JFXTextField();
             txtCedula.setLabelFloat(true);
             txtCedula.setPromptText("Cedula");
             txtCedula.setTextFormatter(Formato.getInstance().cedulaFormat(40));
             txtCedula.setOnKeyPressed(keyEnter);
-            
+
             vbxParametros.getChildren().clear();
             vbxParametros.getChildren().add(txtPlaxMes);
             vbxParametros.getChildren().add(txtID);
@@ -236,25 +234,23 @@ public void busquedaPlanillas() {
 
             tbvResultados.getColumns().clear();
             tbvResultados.getItems().clear();
-            
+
             TableColumn<TipoPlanillaDto, String> tbcId = new TableColumn<>("Id");
             tbcId.setPrefWidth(50);
             tbcId.setCellValueFactory(cd -> cd.getValue().tplaId);
-            
+
             TableColumn<TipoPlanillaDto, String> tbcCodigo = new TableColumn<>("codigo");
             tbcCodigo.setPrefWidth(100);
             tbcCodigo.setCellValueFactory(cd -> cd.getValue().tplaCodigo);
-            
+
             TableColumn<TipoPlanillaDto, String> tbcDescripcion = new TableColumn<>("Descripcion");
             tbcDescripcion.setPrefWidth(150);
             tbcDescripcion.setCellValueFactory(cd -> cd.getValue().tplaDescripcion);
-            
+
             TableColumn<TipoPlanillaDto, String> tbcPlanxMes = new TableColumn<>("Planilla por mes");
             tbcPlanxMes.setPrefWidth(150);
             tbcPlanxMes.setCellValueFactory(cd -> cd.getValue().tplaPlaxmes);
-            
-            
-            
+
             tbvResultados.getColumns().add(tbcId);
             tbvResultados.getColumns().add(tbcCodigo);
             tbvResultados.getColumns().add(tbcDescripcion);
@@ -267,17 +263,17 @@ public void busquedaPlanillas() {
                 String codigo = "%" + txtCodigo.getText() + "%";
 
                 String descripcion = "%" + txtDescripcion.getText() + "%";
-                
+
                 String planillasPorMes = "%" + txtPlaxMes.getText() + "%";
-                
+
                 String idEmp = "%" + txtIDEmpleado.getText() + "%";
-                
+
                 String cedula = "%" + txtCedula.getText() + "%";
-                
+
                 Respuesta respuesta = service.getTipoPlanillas(codigo.toUpperCase(), descripcion.toUpperCase(), planillasPorMes.toUpperCase());
-                
-                if(txtIDEmpleado.getText()!= null || txtCedula.getText()!= null){
-                   //respuesta = service.getTipoPlanillasIDyCed(idEmp.toUpperCase(), cedula.toUpperCase());  
+
+                if (txtIDEmpleado.getText() != null || txtCedula.getText() != null) {
+                    //respuesta = service.getTipoPlanillasIDyCed(idEmp.toUpperCase(), cedula.toUpperCase());  
                 }
                 if (respuesta.getEstado()) {
                     ObservableList<TipoPlanillaDto> tipoPlanilla = FXCollections.observableList((List<TipoPlanillaDto>) respuesta.getResultado("Planillas"));
@@ -297,13 +293,13 @@ public void busquedaPlanillas() {
     public void initialize() {
         Platform.runLater(() -> {
             for (Node object : vbxParametros.getChildren()) {
-                if(object.isFocusTraversable()) {
+                if (object.isFocusTraversable()) {
                     object.requestFocus();
                     break;
                 }
             }
         });
-        
+
         resultado = null;
     }
 }
