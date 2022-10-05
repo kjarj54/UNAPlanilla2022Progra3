@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package cr.ac.una.unaplanillaws.controller;
-/*
+
 import cr.ac.una.unaplanillaws.util.JwTokenHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,10 +28,9 @@ import javax.ws.rs.core.Context;
 @Provider
 @Secure
 @Priority(Priorities.AUTHENTICATION)
-*/
-public class SecurityFilter /*implements ContainerRequestFilter*/ {
-/*
-    private static final String AUTHORIZATION_SERVICE_PATH = "";//TODO
+public class SecurityFilter implements ContainerRequestFilter {
+
+    private static final String AUTHORIZATION_SERVICE_PATH = "getUsuario";//TODO
     private final JwTokenHelper jwTokenHelper = JwTokenHelper.getInstance();
     private static final String AUTHENTICATION_SCHEME = "Bearer ";
     
@@ -121,6 +120,6 @@ public class SecurityFilter /*implements ContainerRequestFilter*/ {
                                 message)
                         .build());
     }
-*/
+
 
 }

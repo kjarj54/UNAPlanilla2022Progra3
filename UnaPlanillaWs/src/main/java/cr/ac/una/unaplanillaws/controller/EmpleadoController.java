@@ -17,7 +17,9 @@ import javax.ws.rs.core.Response;
 import cr.ac.una.unaplanillaws.model.EmpleadoDto;
 import cr.ac.una.unaplanillaws.service.EmpleadoService;
 import cr.ac.una.unaplanillaws.util.CodigoRespuesta;
+import cr.ac.una.unaplanillaws.util.JwTokenHelper;
 import cr.ac.una.unaplanillaws.util.Respuesta;
+import cr.ac.una.unaplanillaws.util.Secure;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.core.GenericEntity;
 
@@ -28,7 +30,7 @@ import javax.ws.rs.core.GenericEntity;
 
 //TODO
 @Path("/EmpleadoController")
-
+@Secure
 public class EmpleadoController {
 
     //TODO
@@ -54,7 +56,7 @@ public class EmpleadoController {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
             }
             EmpleadoDto empleadoDto = (EmpleadoDto) res.getResultado("Empleado");
-            //empleadoDto.setToken(null);//TODO
+            empleadoDto.setToken(JwTokenHelper.getInstance().generatePrivateKey(usuario));
             return Response.ok(empleadoDto).build();
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
