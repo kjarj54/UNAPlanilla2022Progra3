@@ -124,19 +124,27 @@ public class TipoPlanillaService {
 
     public Respuesta getPlanillas(String codigo, String descripcion, String planillasPorMes) {
         try {
-            Query qryEmpleado = em.createNamedQuery("TipoPlanilla.findAll", TipoPlanilla.class);
-            /*qryEmpleado.setParameter("codigo", codigo);
-            qryEmpleado.setParameter("descripcion", descripcion);
-            qryEmpleado.setParameter("planillasPorMes", planillasPorMes);*/
-            List<TipoPlanilla> planillas = qryEmpleado.getResultList();
+            Query qryPlanilla = em.createNamedQuery("TipoPlanilla.findAll", TipoPlanilla.class);
+
+            List<TipoPlanilla> planillas = qryPlanilla.getResultList();
+
+            if (!codigo.equals("%")) {
+                planillas = planillas.stream().filter((t) -> t.getTplaCodigo().contains(codigo)).collect(Collectors.toList());
+            }
+            if (!descripcion.equals("%")) {
+                planillas = planillas.stream().filter((t) -> t.getTplaDescripcion().contains(descripcion)).collect(Collectors.toList());
+
+            }
+            if (!planillasPorMes.equals("%")) {
+                planillas = planillas.stream().filter((t) -> t.getTplaPlaxmes().equals(Integer.getInteger(planillasPorMes))).collect(Collectors.toList());
+
+            }
+            //List<TipoPlanillaDto> planillasDto2 = planillasDto.stream().filter((t) -> codigo.equals("%") || t.getTplaCodigo().contains(codigo)).filter((t) -> descripcion.equals("%") || t.getTplaDescripcion().contains(descripcion)).filter((t)-> planillasPorMes.equals("%") || t.getTplaPlaxmes().toString().contains(planillasPorMes)).collect(Collectors.toList());
             List<TipoPlanillaDto> planillasDto = new ArrayList<>();
             for (TipoPlanilla tipoPlanilla : planillas) {
                 planillasDto.add(new TipoPlanillaDto(tipoPlanilla));
             }
-            
-           List<TipoPlanillaDto> planillasDto2 = planillasDto.stream().filter((t) -> codigo.equals("%") || t.getTplaCodigo().contains(codigo)).filter((t) -> descripcion.equals("%") || t.getTplaDescripcion().contains(descripcion)).filter((t)-> planillasPorMes.equals("%") || t.getTplaPlaxmes().toString().contains(planillasPorMes)).collect(Collectors.toList());
-
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Planillas", planillasDto2);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Planillas", planillasDto);
 
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen planillas con los criterios ingresados.", "getPlanillas NoResultException");
@@ -150,5 +158,5 @@ public class TipoPlanillaService {
         return
         
     }
-*/
+     */
 }

@@ -160,13 +160,13 @@ public class BusquedaViewController extends Controller implements Initializable 
                 tbvResultados.getItems().clear();
                 EmpleadoService service = new EmpleadoService();
 
-                String cedula = "%" + txtCedula.getText();
+                String cedula = "%" + txtCedula.getText() + "%";
 
-                String nombre = "%" + txtNombre.getText();
+                String nombre = "%" + txtNombre.getText() + "%";
 
-                String pApellido = "%" + txtPApellido.getText();
+                String pApellido = "%" + txtPApellido.getText() + "%";
 
-                String sApellido = "%" + txtSApellido.getText();
+                String sApellido = "%" + txtSApellido.getText() + "%";
 
                 Respuesta respuesta = service.getEmpleados(cedula.toUpperCase(), nombre.toUpperCase(), pApellido.toUpperCase());
 
@@ -260,11 +260,22 @@ public class BusquedaViewController extends Controller implements Initializable 
             btnFiltrar.setOnAction((ActionEvent event) -> {
                 tbvResultados.getItems().clear();
                 TipoPlanillaService service = new TipoPlanillaService();
-                String codigo = "%" + txtCodigo.getText() + "%";
 
-                String descripcion = "%" + txtDescripcion.getText() + "%";
+                String codigo = txtCodigo.getText();
 
-                String planillasPorMes = "%" + txtPlaxMes.getText() + "%";
+                String descripcion = txtDescripcion.getText();
+
+                String planillasPorMes = txtPlaxMes.getText();
+
+                if (codigo.isEmpty()) {
+                    codigo = "%" + txtCodigo.getText();
+                }
+                if (descripcion.isEmpty()) {
+                    descripcion = "%" + txtDescripcion.getText();
+                }
+                if (planillasPorMes.isEmpty()) {
+                    planillasPorMes = "%" + txtPlaxMes.getText();
+                }
 
                 String idEmp = "%" + txtIDEmpleado.getText() + "%";
 
