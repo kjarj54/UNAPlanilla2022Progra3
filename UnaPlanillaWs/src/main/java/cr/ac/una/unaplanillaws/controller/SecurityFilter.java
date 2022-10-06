@@ -66,7 +66,7 @@ public class SecurityFilter implements ContainerRequestFilter {
             try {
                 Claims claims = jwTokenHelper.claimKey(token);
                 final SecurityContext currentSecurityContext = request.getSecurityContext();
-                request.setSecurityContext(new SecurityContext() {
+                /*request.setSecurityContext(new SecurityContext() {
 
                     @Override
                     public Principal getUserPrincipal() {
@@ -87,7 +87,7 @@ public class SecurityFilter implements ContainerRequestFilter {
                     public String getAuthenticationScheme() {
                         return AUTHENTICATION_SCHEME;
                     }
-                });
+                });*/
             } catch (ExpiredJwtException | MalformedJwtException e) {
                 if (e instanceof ExpiredJwtException) {
                     abortWithUnauthorized(request, "Authorization is expired");

@@ -30,7 +30,7 @@ import javax.ws.rs.core.GenericEntity;
 
 //TODO
 @Path("/EmpleadoController")
-
+@Secure
 public class EmpleadoController {
 
     //TODO
