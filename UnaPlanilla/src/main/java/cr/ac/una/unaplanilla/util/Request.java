@@ -5,6 +5,10 @@
  */
 package cr.ac.una.unaplanilla.util;
 
+import cr.ac.una.unaplanilla.service.EmpleadoService;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -15,6 +19,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedHashMap;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
+import java.io.StringReader;
+import java.util.Base64;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +34,7 @@ public class Request {
 
     private Client client;
     private Invocation.Builder builder;
+    private static final String AUTHENTICATION_SCHEME = "Bearer ";
     private WebTarget webTarget;
     private Response response;
 
@@ -78,7 +85,64 @@ public class Request {
     }
 
     public void get() {
+        if (verifyTokenExp()) {
+            response = builder.get();
+        }
+        /*if (getStatus() == Response.Status.UNAUTHORIZED.getStatusCode()) {
+            new Thread() {
+                public void run() {
+                    try {
+                        Thread.sleep(4000);
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                FlowController.getInstance().goLogInWindowModal(true);
+                            }
+                        });
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }.start();
+        }*/
+    }
+
+    public void getToken() {
         response = builder.get();
+    }
+
+    public void getRenewal() {
+        JsonObject payload = getPayloadToken(AppContext.getInstance().get("Token").toString());
+        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
+        headers.add("Authorization", payload.getString("rnt"));
+        setHeader(headers);
+        response = builder.get();
+    }
+
+    public void post(Object clazz) {
+        if (verifyTokenExp()) {
+            Entity<?> entity = Entity.entity(clazz, "application/json; charset=UTF-8");
+            response = builder.post(entity);
+        }
+    }
+
+    public void put(Object clazz) {
+        if (verifyTokenExp()) {
+            Entity<?> entity = Entity.entity(clazz, "application/json; charset=UTF-8");
+            response = builder.put(entity);
+        }
+    }
+
+    public void delete() {
+        if (verifyTokenExp()) {
+            response = builder.delete();
+        }
+    }
+
+    public int getStatus() {
+        return response.getStatus();
+    }
+
+    public Boolean isError() {
         if (getStatus() == Response.Status.UNAUTHORIZED.getStatusCode()) {
             new Thread() {
                 public void run() {
@@ -95,27 +159,6 @@ public class Request {
                 }
             }.start();
         }
-    }
-
-    public void post(Object clazz) {
-        Entity<?> entity = Entity.entity(clazz, "application/json; charset=UTF-8");
-        response = builder.post(entity);
-    }
-
-    public void put(Object clazz) {
-        Entity<?> entity = Entity.entity(clazz, "application/json; charset=UTF-8");
-        response = builder.put(entity);
-    }
-
-    public void delete() {
-        response = builder.delete();
-    }
-
-    public int getStatus() {
-        return response.getStatus();
-    }
-
-    public Boolean isError() {
         return getStatus() != Response.Status.OK.getStatusCode();
     }
 
@@ -131,7 +174,7 @@ public class Request {
         }
         return null;
     }
-    
+
     private String readError() {
         String mensaje;
         if (response.hasEntity()) {
@@ -162,4 +205,43 @@ public class Request {
         return response.readEntity(genericType);
     }
 
+    private boolean verifyTokenExp() {
+        if (AppContext.getInstance().get("Token") == null) {
+            return true;//No se ha logeado.
+        }
+        JsonObject payload = getPayloadToken(AppContext.getInstance().get("Token").toString());
+        if (payload.getJsonNumber("exp").longValue() > System.currentTimeMillis() / 1000) {
+            return true;
+        } else {
+            payload = getPayloadToken(payload.getString("rnt"));
+            if (payload != null && payload.getJsonNumber("exp").longValue() > System.currentTimeMillis() / 1000) {
+                EmpleadoService empleadoService = new EmpleadoService();
+                Respuesta respuesta = empleadoService.renovarToken();
+                if (respuesta.getEstado()) {
+                    AppContext.getInstance().set("Token", respuesta.getResultado("Token").toString());
+                    MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
+                    headers.add("Authorization", respuesta.getResultado("Token").toString());
+                    setHeader(headers);
+                    return true;
+                }
+            }
+            response = Response.status(401, "El token a expirado.").build();
+            return false;
+        }
+    }
+
+    private JsonObject getPayloadToken(String token) {
+        if (token != null && !token.isEmpty()) {
+            token = token.substring(AUTHENTICATION_SCHEME.length()).trim();
+            String[] parts = token.split("\\.");
+            String decodedToken = new String(Base64.getUrlDecoder().decode(parts[1]));
+            JsonObject object;
+            try ( JsonReader jsonReader = Json.createReader(new StringReader(decodedToken))) {
+                object = jsonReader.readObject();
+            }
+            return object;
+        } else {
+            return null;
+        }
+    }
 }

@@ -21,13 +21,16 @@ import cr.ac.una.unaplanillaws.util.JwTokenHelper;
 import cr.ac.una.unaplanillaws.util.Respuesta;
 import cr.ac.una.unaplanillaws.util.Secure;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
  * @author Carlos
  */
-
 //TODO
 @Path("/EmpleadoController")
 @Secure
@@ -37,19 +40,22 @@ public class EmpleadoController {
     @EJB
     EmpleadoService empleadoService;
     
+    @Context
+    SecurityContext securityContext;
+
     //TODO
     @GET
     @Path("/ping")
-    public Response ping(){
+    public Response ping() {
         return Response
                 .ok("ping")
                 .build();
     }
-    
+
     //TODO
     @GET
     @Path("/usuario/{usuario}/{clave}")
-    public Response getUsuario(@PathParam("usuario") String usuario,@PathParam("clave") String clave) {
+    public Response getUsuario(@PathParam("usuario") String usuario, @PathParam("clave") String clave) {
         try {
             Respuesta res = empleadoService.validarUsuario(usuario, clave);
             if (!res.getEstado()) {
@@ -67,7 +73,7 @@ public class EmpleadoController {
     //TODO
     @GET
     @Path("/empleados/{id}")
-    public Response getEmpleado(@PathParam("id")Long id) {
+    public Response getEmpleado(@PathParam("id") Long id) {
         try {
             Respuesta res = empleadoService.getEmpleado(id);
             //String usuarioRequest = securityContext.getUserPrincipal().getName();
@@ -85,7 +91,7 @@ public class EmpleadoController {
     //TODO
     @GET
     @Path("/empleados/{cedula}/{nombre}/{pApellido}")
-    public Response getEmpleados(@PathParam("cedula")String cedula, @PathParam("nombre") String nombre, @PathParam("pApellido")String pApellido) {
+    public Response getEmpleados(@PathParam("cedula") String cedula, @PathParam("nombre") String nombre, @PathParam("pApellido") String pApellido) {
         try {
             Respuesta res = empleadoService.getEmpleados(cedula, nombre, pApellido);
             if (!res.getEstado()) {
@@ -108,16 +114,16 @@ public class EmpleadoController {
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            return Response.ok((EmpleadoDto)res.getResultado("Empleado")).build();//TODO
+            return Response.ok((EmpleadoDto) res.getResultado("Empleado")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el empleado").build();//TODO
         }
     }
-    
+
     @DELETE
     @Path("/empleados/{id}")
-    public Response eliminarEmpleado(@PathParam("id")Long id) {
+    public Response eliminarEmpleado(@PathParam("id") Long id) {
         try {
             Respuesta res = empleadoService.eliminarEmpleado(id);
             if (!res.getEstado()) {
@@ -130,4 +136,20 @@ public class EmpleadoController {
         }
     }
 
+    @GET
+    @Path("/renovar")
+    public Response renovar() {
+        try {
+            String usuarioRequest = securityContext.getUserPrincipal().getName();
+            if (usuarioRequest != null && !usuarioRequest.isEmpty()) {
+                return Response.ok(JwTokenHelper.getInstance().generatePrivateKey(usuarioRequest)).build();
+            } else {
+                return Response.status(CodigoRespuesta.ERROR_PERMISOS.getValue()).entity("No se pudo renovar el token").build();
+
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el token").build();
+        }
+    }
 }
