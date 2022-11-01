@@ -281,7 +281,7 @@ public class BusquedaViewController extends Controller implements Initializable 
 
                 String cedula = "%" + txtCedula.getText() + "%";
 
-                Respuesta respuesta = service.getTipoPlanillas(codigo.toUpperCase(), descripcion.toUpperCase(), planillasPorMes.toUpperCase());
+                Respuesta respuesta = service.getTipoPlanillas(codigo, descripcion, planillasPorMes);
 
                 if (txtIDEmpleado.getText() != null || txtCedula.getText() != null) {
                     //respuesta = service.getTipoPlanillasIDyCed(idEmp.toUpperCase(), cedula.toUpperCase());  

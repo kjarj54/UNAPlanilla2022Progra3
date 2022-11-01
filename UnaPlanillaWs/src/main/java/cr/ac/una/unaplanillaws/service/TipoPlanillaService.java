@@ -129,14 +129,14 @@ public class TipoPlanillaService {
             List<TipoPlanilla> planillas = qryPlanilla.getResultList();
 
             if (!codigo.equals("%")) {
-                planillas = planillas.stream().filter((t) -> t.getTplaCodigo().contains(codigo)).collect(Collectors.toList());
+                planillas = planillas.stream().filter((t) -> t.getTplaCodigo().contains(codigo.toLowerCase()) || t.getTplaCodigo().contains(codigo.toUpperCase())).collect(Collectors.toList());
             }
             if (!descripcion.equals("%")) {
-                planillas = planillas.stream().filter((t) -> t.getTplaDescripcion().contains(descripcion)).collect(Collectors.toList());
+                planillas = planillas.stream().filter((t) -> t.getTplaDescripcion().contains(descripcion.toLowerCase()) || t.getTplaDescripcion().contains(descripcion.toUpperCase())).collect(Collectors.toList());
 
             }
             if (!planillasPorMes.equals("%")) {
-                planillas = planillas.stream().filter((t) -> t.getTplaPlaxmes().equals(Integer.getInteger(planillasPorMes))).collect(Collectors.toList());
+                planillas = planillas.stream().filter((t) -> t.getTplaPlaxmes().equals(Integer.parseInt(planillasPorMes))).collect(Collectors.toList());
 
             }
             //List<TipoPlanillaDto> planillasDto2 = planillasDto.stream().filter((t) -> codigo.equals("%") || t.getTplaCodigo().contains(codigo)).filter((t) -> descripcion.equals("%") || t.getTplaDescripcion().contains(descripcion)).filter((t)-> planillasPorMes.equals("%") || t.getTplaPlaxmes().toString().contains(planillasPorMes)).collect(Collectors.toList());
